@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Snakes and Ladders</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- MAIN MENU -->
+    <div class="menu" id="menu">
+
+        <!-- Moving background: slithering snakes + swaying vines (drawn in script.js) -->
+        <canvas class="menu-bg" id="menu-bg" aria-hidden="true"></canvas>
+
+        <!-- Main Content -->
+        <div class="menu-content">
+
+            <div class="badge">BOARD GAME</div>
+
+            <h1 class="title">
+                <span class="title-top">SNAKES</span>
+                <span class="title-and"><i></i>&amp;<i></i></span>
+                <span class="title-bottom">LADDERS</span>
+            </h1>
+
+            <div class="menu-buttons">
+
+                <button onclick="startGame()">
+                    PLAY
+                </button>
+
+                <button class="how-button" onclick="showInstructions()">
+                    HOW TO PLAY
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Bottom Instruction -->
+        <div class="bottom-text">
+
+            <p>
+                SOLVE DERIVATIVES TO MOVE: POWER • CHAIN • QUOTIENT • TRIG • HIGHER-ORDER!
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- GAME SCREEN -->
+    <div class="game-container" id="game">
+
+        <h1>🐍 Snakes and Ladders 🪜</h1>
+
+        <div class="game-content">
+
+            <!-- Game Board -->
+            <div class="board" id="board"></div>
+
+            <!-- Game Controls -->
+            <div class="controls">
+
+                <h2>Game Controls</h2>
+
+                <div class="player-card red-card">
+                    <h3>🔴 Player 1</h3>
+                    <p id="player1-position">Position: 1</p>
+                    <p class="lives-label" id="player1-lives" aria-label="Player 1 has 5 lives">❤️❤️❤️❤️❤️ <span>5/5 lives</span></p>
+                </div>
+
+                <div class="player-card blue-card">
+                    <h3>🤖 Player 2 (Bot)</h3>
+                    <p id="player2-position">Position: 1</p>
+                    <p class="lives-label" id="player2-lives" aria-label="Bot has 5 lives">❤️❤️❤️❤️❤️ <span>5/5 lives</span></p>
+                </div>
+
+                <h2 id="turn">Player 1's Turn</h2>
+
+                <div id="dice" class="premium-dice" aria-label="3D rolling dice" role="img">
+                    <div class="dice-arena">
+                        <div class="dice-glow"></div>
+                        <div class="dice-shadow"></div>
+                        <div class="dice-stage">
+                            <div class="dice-cube" id="dice-cube">
+                                <div class="dice-face face-front" aria-label="1"><i class="pip"></i></div>
+                                <div class="dice-face face-back" aria-label="6"><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
+                                <div class="dice-face face-right" aria-label="3"><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
+                                <div class="dice-face face-left" aria-label="4"><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
+                                <div class="dice-face face-top" aria-label="2"><i class="pip"></i><i class="pip"></i></div>
+                                <div class="dice-face face-bottom" aria-label="5"><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
+                            </div>
+                        </div>
+                        <div class="dice-platform"></div>
+                    </div>
+                    <div id="dice-result" aria-live="polite">READY TO ROLL</div>
+                </div>
+
+                <button id="roll-button" onclick="rollDice()">
+                    ROLL DICE
+                </button>
+
+                <p id="message">Roll the dice to start!</p>
+
+                <button class="restart-button" onclick="restartGame()">
+                    RESTART
+                </button>
+
+                <button class="menu-button" onclick="backToMenu()">
+                    MAIN MENU
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <dialog id="instructions-dialog" class="instructions-dialog">
+        <h2>How to Play</h2>
+        <p>The dice number sets the question level: 1 = Power Rule, 2 = Chain Rule, 3 = Quotient Rule, 4 = Trigonometric, 5 = Higher-Order, and 6 = Mixed Challenge. Answer correctly to move the number of spaces rolled; an incorrect answer costs one life and you stay put. You play as Player 1 against a computer bot (Player 2), which rolls and answers automatically. Each player starts with 5 lives. If a player loses all 5 lives, the game ends and the other player wins.</p>
+        <p>Land on a ladder to climb up, or a snake to slide down.</p>
+        <p>Reach square 100 with an exact roll to win!</p>
+        <button type="button" onclick="closeInstructions()">CLOSE</button>
+    </dialog>
+
+    <dialog id="question-dialog" class="question-dialog">
+        <div class="quiz-category" id="question-category"></div>
+        <h2>Solve the derivative</h2>
+        <p id="question-problem" class="quiz-problem"></p>
+        <div id="answer-options" class="answer-options"></div>
+        <p id="question-feedback" aria-live="polite"></p>
+        <button id="question-next" type="button" onclick="finishQuestion()" hidden>CONTINUE</button>
+    </dialog>
+
+    <dialog id="game-over-dialog" class="game-over-dialog" aria-labelledby="game-over-title">
+        <div class="game-over-trophy" aria-hidden="true">🏆</div>
+        <h2 id="game-over-title">GAME OVER</h2>
+        <p id="game-over-winner"></p>
+        <p id="game-over-reason"></p>
+        <div class="game-over-actions">
+            <button type="button" onclick="restartGame()">PLAY AGAIN</button>
+            <button type="button" class="menu-button" onclick="backToMenu()">MAIN MENU</button>
+        </div>
+    </dialog>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
